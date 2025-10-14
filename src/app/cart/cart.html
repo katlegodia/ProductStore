@@ -1,0 +1,15 @@
+<div *ngIf="showNotification" class="popup">{{ notification }}</div>
+<h1>Your Cart</h1>
+<div *ngFor="let item of cart" class="cart-item">
+  <img [src]="item.image" alt="{{item.title}}" width="50" />
+  <span>{{ item.title }}</span>
+  <span>Price: {{ item.price | currency:'ZAR':'symbol' }}</span>
+  <button (click)="subtract(item)">-</button>
+  <span>{{ item.quantity }}</span>
+  <button (click)="add(item)">+</button>
+  <button (click)="remove(item)" style="background:#e53935;">Remove</button>
+</div>
+
+<div *ngIf="cart.length > 0" class="cart-total">
+  <strong>Total:</strong> {{ totalCost | currency:'ZAR':'symbol' }}
+</div>

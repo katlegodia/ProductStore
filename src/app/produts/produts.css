@@ -1,0 +1,118 @@
+body {
+  background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Center the main content */
+h1 {
+  text-align: center;
+  margin-top: 2rem;
+  color: #222;
+  letter-spacing: 1px;
+}
+
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* Animated product card */
+.product-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 1.2rem 1rem;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  animation: fadeInUp 0.7s;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  transform: translateY(-6px) scale(1.04);
+}
+
+.product-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  background: #f6f6f6;
+  animation: popIn 0.7s;
+}
+
+.product-card h2 {
+  font-size: 1.1rem;
+  margin: 0.3rem 0 0.1rem 0;
+  text-align: center;
+  color: #0078d4;
+  letter-spacing: 0.5px;
+}
+
+.product-card p {
+  color: #444;
+  font-size: 1rem;
+  margin: 0.1rem 0;
+  text-align: center;
+}
+
+.product-card button {
+  background: linear-gradient(90deg, #0078d4 60%, #005fa3 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.35rem 0.9rem;
+  margin: 0.3rem 0.15rem 0 0.15rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.98rem;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.product-card button:hover {
+  background: linear-gradient(90deg, #005fa3 60%, #0078d4 100%);
+  transform: scale(1.07);
+}
+
+/* Popup animation */
+.popup {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: #222;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  z-index: 1000;
+  opacity: 0.97;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-size: 1.1rem;
+  animation: fadeInDown 0.5s;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.7);}
+  to { opacity: 1; transform: scale(1);}
+}

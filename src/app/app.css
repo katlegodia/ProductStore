@@ -1,0 +1,95 @@
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Reduced gap */
+  justify-content: center;
+  margin-top: 1rem; /* Less margin */
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 1rem 0.7rem; /* Less padding */
+  width: 240px; /* Slightly smaller */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: none;
+}
+
+.product-card h2 {
+  font-size: 1.05rem;
+  margin: 0.2rem 0 0.1rem 0;
+  text-align: center;
+  color: #222;
+}
+
+.product-card p {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0.1rem 0;
+  text-align: center;
+}
+
+.product-card button {
+  background: linear-gradient(90deg, #0078d4 60%, #005fa3 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.28rem 0.7rem; /* Less padding */
+  margin: 0.2rem 0.1rem 0 0.1rem; /* Less margin */
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.product-card button:hover {
+  background: linear-gradient(90deg, #005fa3 60%, #0078d4 100%);
+  transform: scale(1.04);
+}
+
+.cart-link {
+  display: inline-block;
+  margin: 1rem auto 0 auto;
+  padding: 0.45rem 1.2rem;
+  background: #222;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.cart-link:hover {
+  background: #0078d4;
+  transform: scale(1.03);
+}
+
+.popup {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #222;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  z-index: 1000;
+  opacity: 0.97;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-size: 1rem;
+}
+
+.main-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 1.2rem 1rem;
+}

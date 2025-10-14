@@ -1,0 +1,33 @@
+/* Modern product details styles */
+.product-details-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-details-container img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f6f6f6;
+  margin-bottom: 2rem;
+}
+
+.product-details-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-details-container p {
+  color: #444;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  text-align: center;
+}

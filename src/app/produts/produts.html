@@ -1,0 +1,10 @@
+<div *ngIf="showNotification" class="popup">{{ notification }}</div>
+<h1>Product Store</h1>
+<div class="products-container">
+  <div class="product-card" *ngFor="let product of fakeData">
+    <img [src]="product.image" alt="{{ product.title }}" />
+    <h2>{{ product.title }}</h2>
+  </div>
+</div>
+
+
