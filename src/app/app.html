@@ -1,2 +1,31 @@
 <div *ngIf="showNotification" class="popup">{{ notification }}</div>
-<router-outlet></router-outlet>
+
+<!-- Navigation Header -->
+<header class="app-header">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a routerLink="/products" class="brand-link">
+        <h1>ProductStore</h1>
+      </a>
+    </div>
+    
+    <div class="nav-links">
+      <a routerLink="/" class="nav-link">Products</a>
+      <a routerLink="/cart" class="nav-link">Cart</a>
+      
+      <!-- User Authentication Section -->
+      <div *ngIf="!isLoggedIn" class="auth-section">
+        <a routerLink="/login" class="nav-link login-btn">Login</a>
+      </div>
+      
+      <div *ngIf="isLoggedIn" class="auth-section">
+        <span class="user-greeting">Hello, {{ currentUser?.firstName }}!</span>
+        <button (click)="logout()" class="logout-btn">Logout</button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>
