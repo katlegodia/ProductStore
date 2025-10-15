@@ -1,0 +1,159 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>Welcome to ProductStore</h2>
+      <div class="tab-buttons">
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'login'"
+          (click)="switchTab('login')">
+          Login
+        </button>
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'register'"
+          (click)="switchTab('register')">
+          Register
+        </button>
+      </div>
+    </div>
+
+    <!-- Message Display -->
+    <div *ngIf="message" class="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+      {{ message }}
+    </div>
+
+    <!-- Login Form -->
+    <form *ngIf="activeTab === 'login'" (ngSubmit)="onLogin()" class="login-form">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input 
+          type="email" 
+          id="loginEmail" 
+          [(ngModel)]="loginData.email" 
+          name="loginEmail"
+          required 
+          placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input 
+          type="password" 
+          id="loginPassword" 
+          [(ngModel)]="loginData.password" 
+          name="loginPassword"
+          required 
+          placeholder="Enter your password">
+      </div>
+
+      <button 
+        type="submit" 
+        class="submit-button" 
+        [disabled]="loading">
+        <span *ngIf="loading" class="loading-spinner"></span>
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form *ngIf="activeTab === 'register'" (ngSubmit)="onRegister()" class="login-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input 
+            type="text" 
+            id="firstName" 
+            [(ngModel)]="registerData.firstName" 
+            name="firstName"
+            required 
+            placeholder="First name">
+        </div>
+
+        <div class="form-group">
+          <label for="Surname">Surname</label>
+          <input 
+            type="text" 
+            id="Surname" 
+            [(ngModel)]="registerData.Surname" 
+            name="Surname"
+            required 
+            placeholder="Surname">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="registerEmail">Email</label>
+        <input 
+          type="email" 
+          id="registerEmail" 
+          [(ngModel)]="registerData.email" 
+          name="registerEmail"
+          required 
+          placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select 
+          id="country" 
+          [(ngModel)]="registerData.country" 
+          name="country"
+          required 
+          class="country-select">
+          <option *ngFor="let country of countries" [value]="country.code">
+            {{ country.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <div class="phone-input-container">
+          <span class="phone-code">{{ getSelectedCountry()?.phoneCode }}</span>
+          <input 
+            type="tel" 
+            id="phoneNumber" 
+            [(ngModel)]="registerData.phoneNumber" 
+            name="phoneNumber"
+            required 
+            placeholder="Enter your phone number"
+            class="phone-input">
+        </div>
+        <small class="phone-hint" *ngIf="registerData.country === 'ZA'">
+          Enter 10 digits (e.g., 0123456789)
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="registerPassword">Password</label>
+        <input 
+          type="password" 
+          id="registerPassword" 
+          [(ngModel)]="registerData.password" 
+          name="registerPassword"
+          required 
+          placeholder="Create a password (min 6 characters)">
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          [(ngModel)]="registerData.confirmPassword" 
+          name="confirmPassword"
+          required 
+          placeholder="Confirm your password">
+      </div>
+
+      <button 
+        type="submit" 
+        class="submit-button" 
+        [disabled]="loading">
+        <span *ngIf="loading" class="loading-spinner"></span>
+        {{ loading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+  </div>
+</div>
