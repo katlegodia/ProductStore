@@ -24,16 +24,37 @@
     </div>
 
     <!-- Login Form -->
-    <form *ngIf="activeTab === 'login'" (ngSubmit)="onLogin()" class="login-form">
+    <form *ngIf="activeTab === 'login'" (ngSubmit)="onLogin()" class="auth-form" #loginForm="ngForm">
       <div class="form-group">
-        <label for="loginEmail">Email</label>
+        <label for="loginEmail">Email Address</label>
         <input 
           type="email" 
           id="loginEmail" 
           [(ngModel)]="loginData.email" 
           name="loginEmail"
-          required 
-          placeholder="Enter your email">
+          placeholder="Enter your email address"
+          class="form-input">
+      </div>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPhone">Phone Number</label>
+        <div class="phone-input-container">
+          <span class="phone-code">+27</span>
+          <input 
+            type="tel" 
+            id="loginPhone" 
+            [(ngModel)]="loginData.phoneNumber" 
+            name="loginPhone"
+            placeholder="Enter 10-digit phone number"
+            class="phone-input"
+            maxlength="10"
+            (input)="onPhoneNumberInput($event)">
+        </div>
+        <small class="input-hint">Enter your 10-digit South African phone number</small>
       </div>
 
       <div class="form-group">
@@ -43,8 +64,8 @@
           id="loginPassword" 
           [(ngModel)]="loginData.password" 
           name="loginPassword"
-          required 
-          placeholder="Enter your password">
+          placeholder="Enter your password"
+          class="form-input">
       </div>
 
       <button 
@@ -56,101 +77,173 @@
       </button>
     </form>
 
-    <!-- Register Form -->
-    <form *ngIf="activeTab === 'register'" (ngSubmit)="onRegister()" class="login-form">
+    <!-- Registration Form -->
+    <form *ngIf="activeTab === 'register'" (ngSubmit)="onRegister()" class="auth-form" #registerForm="ngForm">
       <div class="form-row">
         <div class="form-group">
-          <label for="firstName">First Name</label>
+          <label for="firstName">First Name *</label>
           <input 
             type="text" 
             id="firstName" 
             [(ngModel)]="registerData.firstName" 
             name="firstName"
-            required 
-            placeholder="First name">
+            required
+            placeholder="First name"
+            class="form-input">
         </div>
 
         <div class="form-group">
-          <label for="Surname">Surname</label>
+          <label for="lastName">Surname *</label>
           <input 
             type="text" 
-            id="Surname" 
-            [(ngModel)]="registerData.Surname" 
-            name="Surname"
-            required 
-            placeholder="Surname">
+            id="lastName" 
+            [(ngModel)]="registerData.lastName" 
+            name="lastName"
+            required
+            placeholder="Surname"
+            class="form-input">
         </div>
       </div>
 
       <div class="form-group">
-        <label for="registerEmail">Email</label>
+        <label for="registerEmail">Email Address *</label>
         <input 
           type="email" 
           id="registerEmail" 
           [(ngModel)]="registerData.email" 
           name="registerEmail"
-          required 
-          placeholder="Enter your email">
+          required
+          placeholder="Enter your email address"
+          class="form-input">
+        <small class="input-hint">We'll use this for account verification and updates</small>
       </div>
 
       <div class="form-group">
-        <label for="country">Country</label>
+        <label for="country">Country *</label>
         <select 
           id="country" 
           [(ngModel)]="registerData.country" 
           name="country"
           required 
-          class="country-select">
+          class="form-select">
           <option *ngFor="let country of countries" [value]="country.code">
-            {{ country.name }}
+            {{ country.flag }} {{ country.name }}
           </option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
+        <label for="registerPhone">Phone Number *</label>
         <div class="phone-input-container">
-          <span class="phone-code">{{ getSelectedCountry()?.phoneCode }}</span>
+          <span class="phone-code">{{ getSelectedCountry().phoneCode }}</span>
           <input 
             type="tel" 
-            id="phoneNumber" 
+            id="registerPhone" 
             [(ngModel)]="registerData.phoneNumber" 
-            name="phoneNumber"
-            required 
-            placeholder="Enter your phone number"
-            class="phone-input">
+            name="registerPhone"
+            required
+            [placeholder]="getSelectedCountry().code === 'ZA' ? 'Enter 10-digit number' : 'Enter phone number'"
+            class="phone-input"
+            [maxlength]="getSelectedCountry().code === 'ZA' ? '10' : '15'"
+            (input)="onPhoneNumberInput($event)">
         </div>
-        <small class="phone-hint" *ngIf="registerData.country === 'ZA'">
-          Enter 10 digits (e.g., 0123456789)
+        <small class="input-hint" *ngIf="getSelectedCountry().code === 'ZA'">
+          Enter your 10-digit South African phone number (e.g., 0123456789)
+        </small>
+        <small class="input-hint" *ngIf="getSelectedCountry().code !== 'ZA'">
+          Enter your phone number for {{ getSelectedCountry().name }}
         </small>
       </div>
 
       <div class="form-group">
-        <label for="registerPassword">Password</label>
+        <label for="registerPassword">Password *</label>
         <input 
           type="password" 
           id="registerPassword" 
           [(ngModel)]="registerData.password" 
           name="registerPassword"
-          required 
-          placeholder="Create a password (min 6 characters)">
+          required
+          placeholder="Create a strong password"
+          class="form-input">
+        
+        <!-- Password Strength Indicator -->
+        <div class="password-strength" *ngIf="registerData.password">
+          <div class="strength-bar">
+            <div class="strength-fill" 
+                 [style.width.%]="getPasswordStrength(registerData.password).percentage"
+                 [style.background-color]="getPasswordStrengthColor(getPasswordStrength(registerData.password).strength)">
+            </div>
+          </div>
+          <span class="strength-text" 
+                [style.color]="getPasswordStrengthColor(getPasswordStrength(registerData.password).strength)">
+            {{ getPasswordStrength(registerData.password).strength }}
+          </span>
+        </div>
+
+        <!-- Password Requirements -->
+        <div class="password-requirements" *ngIf="registerData.password">
+          <small class="requirements-title">Password must contain:</small>
+          <div class="requirements-list">
+            <div class="requirement" 
+                 [class.met]="getPasswordStrength(registerData.password).requirements.length">
+              <span class="requirement-icon">{{ getPasswordStrength(registerData.password).requirements.length ? '✓' : '✗' }}</span>
+              At least 8 characters
+            </div>
+            <div class="requirement" 
+                 [class.met]="getPasswordStrength(registerData.password).requirements.uppercase">
+              <span class="requirement-icon">{{ getPasswordStrength(registerData.password).requirements.uppercase ? '✓' : '✗' }}</span>
+              One uppercase letter (A-Z)
+            </div>
+            <div class="requirement" 
+                 [class.met]="getPasswordStrength(registerData.password).requirements.lowercase">
+              <span class="requirement-icon">{{ getPasswordStrength(registerData.password).requirements.lowercase ? '✓' : '✗' }}</span>
+              One lowercase letter (a-z)
+            </div>
+            <div class="requirement" 
+                 [class.met]="getPasswordStrength(registerData.password).requirements.number">
+              <span class="requirement-icon">{{ getPasswordStrength(registerData.password).requirements.number ? '✓' : '✗' }}</span>
+              One number (0-9)
+            </div>
+            <div class="requirement" 
+                 [class.met]="getPasswordStrength(registerData.password).requirements.special">
+              <span class="requirement-icon">{{ getPasswordStrength(registerData.password).requirements.special ? '✓' : '✗' }}</span>
+              One special character (!@#$%^&*)
+            </div>
+          </div>
+        </div>
+        <small class="input-hint" *ngIf="!registerData.password">
+          Password must be at least 8 characters with uppercase, lowercase, number and special character
+        </small>
       </div>
 
       <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
+        <label for="confirmPassword">Confirm Password *</label>
         <input 
           type="password" 
           id="confirmPassword" 
           [(ngModel)]="registerData.confirmPassword" 
           name="confirmPassword"
-          required 
-          placeholder="Confirm your password">
+          required
+          placeholder="Confirm your password"
+          class="form-input"
+          [class.password-match]="registerData.password && registerData.confirmPassword && registerData.password === registerData.confirmPassword"
+          [class.password-mismatch]="registerData.password && registerData.confirmPassword && registerData.password !== registerData.confirmPassword">
+        
+        <!-- Password Match Indicator -->
+        <div class="password-match-indicator" *ngIf="registerData.confirmPassword">
+          <small *ngIf="registerData.password === registerData.confirmPassword" class="match-success">
+            ✓ Passwords match
+          </small>
+          <small *ngIf="registerData.password !== registerData.confirmPassword" class="match-error">
+            ✗ Passwords do not match
+          </small>
+        </div>
       </div>
 
       <button 
         type="submit" 
         class="submit-button" 
-        [disabled]="loading">
+        [disabled]="loading || !isRegistrationFormValid()">
         <span *ngIf="loading" class="loading-spinner"></span>
         {{ loading ? 'Creating Account...' : 'Create Account' }}
       </button>
