@@ -3,8 +3,8 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { NgForOf, CurrencyPipe, CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService, User } from './auth/auth.service';
 import { CartService } from './cart/cart.service';
+import { AuthService, User } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -23,8 +23,8 @@ export class App implements OnInit {
   constructor(
     private http: HttpClient, 
     private router: Router,
-    private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
