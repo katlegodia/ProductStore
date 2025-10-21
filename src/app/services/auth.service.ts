@@ -8,6 +8,7 @@ export interface User {
   email: string;
   phoneNumber: string;
   country: string;
+  profilePicture?: string; // Optional profile picture URL/base64
   createdAt: Date;
 }
 
@@ -268,5 +269,76 @@ export class AuthService {
   // Get all users (for demo purposes - remove in production)
   getAllUsers(): any[] {
     return this.getStoredUsers();
+  }
+
+  // Update profile picture
+  updateProfilePicture(profilePicture: string): Observable<AuthResponse> {
+    return new Observable(observer => {
+      setTimeout(() => {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser) {
+          observer.next({ success: false, message: 'User not logged in' });
+          observer.complete();
+          return;
+        }
+
+        // Store profile picture separately for better performance
+        localStorage.setItem(`profilePic_${currentUser.id}`, profilePicture);
+
+        observer.next({ 
+          success: true, 
+          message: 'Profile picture updated successfully!' 
+        });
+        observer.complete();
+      }, 500);
+    });
+  }
+
+  // Get profile picture
+  getProfilePicture(userId: string): string | null {
+    return localStorage.getItem(`profilePic_${userId}`);
+  }
+
+  // Remove profile picture
+  removeProfilePicture(userId: string): void {
+    localStorage.removeItem(`profilePic_${userId}`);
+  }
+
+  // Change password
+  changePassword(currentPassword: string, newPassword: string): Observable<AuthResponse> {
+    return new Observable(observer => {
+      setTimeout(() => {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser) {
+          observer.next({ success: false, message: 'User not logged in' });
+          observer.complete();
+          return;
+        }
+
+        const users = this.getStoredUsers();
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        
+        if (userIndex !== -1) {
+          // Verify current password
+          if (users[userIndex].password !== currentPassword) {
+            observer.next({ success: false, message: 'Current password is incorrect' });
+            observer.complete();
+            return;
+          }
+
+          // Update password
+          users[userIndex].password = newPassword;
+          localStorage.setItem('users', JSON.stringify(users));
+
+          observer.next({ 
+            success: true, 
+            message: 'Password changed successfully!' 
+          });
+        } else {
+          observer.next({ success: false, message: 'User not found' });
+        }
+        observer.complete();
+      }, 1000);
+    });
   }
 }

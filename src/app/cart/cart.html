@@ -1,15 +1,46 @@
 <div *ngIf="showNotification" class="popup">{{ notification }}</div>
-<h1>Your Cart</h1>
-<div *ngFor="let item of cart" class="cart-item">
-  <img [src]="item.image" alt="{{item.title}}" width="50" />
-  <span>{{ item.title }}</span>
-  <span>Price: {{ item.price | currency:'ZAR':'symbol' }}</span>
-  <button (click)="subtract(item)">-</button>
-  <span>{{ item.quantity }}</span>
-  <button (click)="add(item)">+</button>
-  <button (click)="remove(item)" style="background:#e53935;">Remove</button>
-</div>
+<header class="app-header">
+  <h1>Your Cart</h1>
+  <nav class="nav-links">
+    <a routerLink="/products" class="nav-link">
+      <span class="icon">🛍️</span>
+      Products
+    </a>
+    <a routerLink="/profile" class="nav-link">
+      <span class="icon">👤</span>
+      Profile
+    </a>
+  </nav>
+</header>
 
-<div *ngIf="cart.length > 0" class="cart-total">
-  <strong>Total:</strong> {{ totalCost | currency:'ZAR':'symbol' }}
+<div class="cart-content">
+  <div *ngIf="cart.length === 0" class="empty-cart">
+    <div class="empty-cart-icon">🛒</div>
+    <h2>Your cart is empty</h2>
+    <p>Browse our products and add items to your cart</p>
+    <a routerLink="/products" class="shop-now-btn">Shop Now</a>
+  </div>
+
+  <div *ngIf="cart.length > 0" class="cart-items">
+    <div *ngFor="let item of cart" class="cart-item">
+      <img [src]="item.image" alt="{{item.title}}" class="item-image" />
+      <div class="item-details">
+        <h3>{{ item.title }}</h3>
+        <p class="item-price">{{ item.price | currency:'ZAR':'symbol' }}</p>
+      </div>
+      <div class="quantity-controls">
+        <button (click)="subtract(item)" class="quantity-btn">-</button>
+        <span class="quantity">{{ item.quantity }}</span>
+        <button (click)="add(item)" class="quantity-btn">+</button>
+      </div>
+      <button (click)="remove(item)" class="remove-btn">Remove</button>
+    </div>
+
+    <div class="cart-summary">
+      <div class="total-section">
+        <strong class="total-label">Total: {{ totalCost | currency:'ZAR':'symbol' }}</strong>
+      </div>
+      <button class="checkout-btn">Proceed to Checkout</button>
+    </div>
+  </div>
 </div>
