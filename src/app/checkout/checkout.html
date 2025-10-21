@@ -1,0 +1,186 @@
+<div *ngIf="showNotification" class="popup">{{ notification }}</div>
+
+<div class="checkout-container" *ngIf="!orderPlaced">
+  <div class="checkout-header">
+    <button class="back-button" (click)="goBack()">← Back to Cart</button>
+    <h1>Checkout</h1>
+  </div>
+
+  <div class="checkout-content">
+    <!-- Order Summary Section -->
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <div class="summary-items">
+        <div *ngFor="let item of cart" class="summary-item">
+          <img [src]="item.image" alt="{{item.title}}" class="item-image" />
+          <div class="item-details">
+            <h3>{{ item.title }}</h3>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p class="item-price">{{ item.price | currency:'ZAR':'symbol' }}</p>
+          </div>
+          <div class="item-total">
+            {{ (item.price * item.quantity) | currency:'ZAR':'symbol' }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="summary-totals">
+        <div class="total-line">
+          <span>Items ({{ totalItems }}):</span>
+          <span>{{ totalCost | currency:'ZAR':'symbol' }}</span>
+        </div>
+        <div class="total-line">
+          <span>Shipping:</span>
+          <span>Free</span>
+        </div>
+        <div class="total-line final-total">
+          <strong>Total: {{ totalCost | currency:'ZAR':'symbol' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Information Form -->
+    <div class="customer-form">
+      <h2>Shipping Information</h2>
+      <form #checkoutForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              [(ngModel)]="customerInfo.firstName"
+              required
+              #firstName="ngModel"
+              class="form-control"
+              [class.error]="firstName.invalid && firstName.touched"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              [(ngModel)]="customerInfo.lastName"
+              required
+              #lastName="ngModel"
+              class="form-control"
+              [class.error]="lastName.invalid && lastName.touched"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="customerInfo.email"
+            required
+            email
+            #email="ngModel"
+            class="form-control"
+            [class.error]="email.invalid && email.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            [(ngModel)]="customerInfo.phone"
+            required
+            #phone="ngModel"
+            class="form-control"
+            placeholder="e.g., +27 12 345 6789"
+            [class.error]="phone.invalid && phone.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address *</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            [(ngModel)]="customerInfo.address"
+            required
+            #address="ngModel"
+            class="form-control"
+            [class.error]="address.invalid && address.touched"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              [(ngModel)]="customerInfo.city"
+              required
+              #city="ngModel"
+              class="form-control"
+              [class.error]="city.invalid && city.touched"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="postalCode">Postal Code *</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              [(ngModel)]="customerInfo.postalCode"
+              required
+              #postalCode="ngModel"
+              class="form-control"
+              [class.error]="postalCode.invalid && postalCode.touched"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method *</label>
+          <select
+            id="paymentMethod"
+            name="paymentMethod"
+            [(ngModel)]="customerInfo.paymentMethod"
+            required
+            class="form-control"
+          >
+            <option value="credit-card">Credit Card</option>
+            <option value="debit-card">Debit Card</option>
+            <option value="eft">EFT</option>
+          </select>
+        </div>
+
+        <div class="checkout-actions">
+          <button
+            type="submit"
+            class="checkout-button"
+            [disabled]="isProcessing || checkoutForm.invalid"
+          >
+            <span *ngIf="!isProcessing">Place Order</span>
+            <span *ngIf="isProcessing">Processing...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Order Confirmation -->
+<div class="order-confirmation" *ngIf="orderPlaced">
+  <div class="success-icon">✓</div>
+  <h1>Order Placed Successfully!</h1>
+  <p>Thank you for your order. You will receive a confirmation email shortly.</p>
+  <p>Redirecting to products page...</p>
+</div>

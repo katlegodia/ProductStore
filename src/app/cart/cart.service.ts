@@ -16,4 +16,8 @@ export class CartService {
       this.cart.push({ ...product, quantity: 1 });
     }
   }
+
+  clearCart() {
+    this.cart = [];
+  }
 }

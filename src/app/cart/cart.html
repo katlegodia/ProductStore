@@ -12,4 +12,14 @@
 
 <div *ngIf="cart.length > 0" class="cart-total">
   <strong>Total:</strong> {{ totalCost | currency:'ZAR':'symbol' }}
+  <div class="checkout-section">
+    <button class="checkout-button" (click)="proceedToCheckout()">
+      Proceed to Checkout
+    </button>
+  </div>
+</div>
+
+<div *ngIf="cart.length === 0" class="empty-cart">
+  <h2>Your cart is empty</h2>
+  <p>Add some products to your cart to proceed with checkout.</p>
 </div>

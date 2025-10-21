@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { CartService } from './cart.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class Cart implements OnInit {
     notification: string = '';
     showNotification: boolean = false;
 
-    constructor(private cartService: CartService) {}
+    constructor(private cartService: CartService, private router: Router) {}
 
     ngOnInit() {
         this.cart = this.cartService.getCart();
@@ -50,5 +51,13 @@ export class Cart implements OnInit {
 
     get totalCost(): number {
         return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    proceedToCheckout() {
+        if (this.cart.length > 0) {
+            this.router.navigate(['/checkout']);
+        } else {
+            this.showPopup('Your cart is empty. Add some items first.');
+        }
     }
 }
