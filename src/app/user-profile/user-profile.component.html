@@ -1,0 +1,207 @@
+<div class="profile-container">
+  <!-- Header -->
+  <header class="profile-header">
+    <div class="header-content">
+      <div class="nav-buttons">
+        <button class="nav-btn" (click)="navigateToProducts()">
+          <i class="icon">🛍️</i>
+          Products
+        </button>
+        <button class="nav-btn" (click)="navigateToCart()">
+          <i class="icon">🛒</i>
+          Cart
+        </button>
+      </div>
+      <h1>My Profile</h1>
+      <button class="logout-btn" (click)="logout()">
+        <i class="icon">🚪</i>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="profile-main">
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p>Updating profile...</p>
+    </div>
+
+    <!-- Message Display -->
+    <div *ngIf="message" class="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+      {{ message }}
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content" *ngIf="user">
+      <!-- Profile Picture Section -->
+      <div class="profile-picture-section">
+        <div class="picture-container">
+          <div class="picture-frame">
+            <img *ngIf="profilePicture" [src]="profilePicture" alt="Profile Picture" class="profile-pic">
+            <div *ngIf="!profilePicture" class="default-avatar">
+              <i class="avatar-icon">👤</i>
+            </div>
+          </div>
+          
+          <div *ngIf="isEditing" class="picture-controls">
+            <label for="profilePicInput" class="upload-btn">
+              <i class="icon">📷</i>
+              Change Photo
+            </label>
+            <input type="file" id="profilePicInput" accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+            
+            <button *ngIf="profilePicture" class="remove-btn" (click)="removeProfilePicture()">
+              <i class="icon">🗑️</i>
+              Remove
+            </button>
+          </div>
+        </div>
+        
+        <div class="user-info">
+          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+          <p class="user-email">{{ user.email }}</p>
+          <p class="member-since">Member since {{ user.createdAt | date:'MMM yyyy' }}</p>
+        </div>
+      </div>
+
+      <!-- Profile Form -->
+      <div class="profile-form-section">
+        <div class="form-header">
+          <h3>Personal Information</h3>
+          <button *ngIf="!isEditing" class="edit-btn" (click)="toggleEdit()">
+            <i class="icon">✏️</i>
+            Edit Profile
+          </button>
+        </div>
+
+        <form class="profile-form" (ngSubmit)="saveProfile()" #profileFormRef="ngForm">
+          <!-- Basic Information -->
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="firstName">First Name *</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                name="firstName"
+                [(ngModel)]="profileForm.firstName"
+                [disabled]="!isEditing"
+                required
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="lastName">Last Name *</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                name="lastName"
+                [(ngModel)]="profileForm.lastName"
+                [disabled]="!isEditing"
+                required
+                class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              [(ngModel)]="profileForm.email"
+              [disabled]="!isEditing"
+              required
+              class="form-control">
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number *</label>
+              <input 
+                type="tel" 
+                id="phoneNumber" 
+                name="phoneNumber"
+                [(ngModel)]="profileForm.phoneNumber"
+                [disabled]="!isEditing"
+                required
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <input 
+                type="text" 
+                id="country" 
+                name="country"
+                [(ngModel)]="profileForm.country"
+                [disabled]="!isEditing"
+                required
+                class="form-control">
+            </div>
+          </div>
+
+          <!-- Password Section -->
+          <div *ngIf="isEditing" class="password-section">
+            <div class="password-header">
+              <button type="button" class="toggle-password-btn" (click)="togglePasswordFields()">
+                <i class="icon">{{ showPasswordFields ? '🔓' : '🔒' }}</i>
+                {{ showPasswordFields ? 'Cancel Password Change' : 'Change Password' }}
+              </button>
+            </div>
+
+            <div *ngIf="showPasswordFields" class="password-fields">
+              <div class="form-group">
+                <label for="currentPassword">Current Password *</label>
+                <input 
+                  type="password" 
+                  id="currentPassword" 
+                  name="currentPassword"
+                  [(ngModel)]="profileForm.currentPassword"
+                  class="form-control"
+                  placeholder="Enter your current password">
+              </div>
+
+              <div class="form-group-row">
+                <div class="form-group">
+                  <label for="newPassword">New Password *</label>
+                  <input 
+                    type="password" 
+                    id="newPassword" 
+                    name="newPassword"
+                    [(ngModel)]="profileForm.newPassword"
+                    class="form-control"
+                    placeholder="Enter new password (min 6 characters)">
+                </div>
+                
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm New Password *</label>
+                  <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    name="confirmPassword"
+                    [(ngModel)]="profileForm.confirmPassword"
+                    class="form-control"
+                    placeholder="Confirm new password">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div *ngIf="isEditing" class="form-actions">
+            <button type="button" class="cancel-btn" (click)="toggleEdit()">
+              <i class="icon">❌</i>
+              Cancel
+            </button>
+            <button type="submit" class="save-btn" [disabled]="isLoading">
+              <i class="icon">💾</i>
+              {{ isLoading ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

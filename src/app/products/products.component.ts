@@ -32,7 +32,7 @@ export class ProductsComponent implements OnInit {
 
   addToCart(product: any) {
     this.cartService.addToCart(product);
-    this.showPopup('Item added to cart!');
+    this.showPopup(`"${product.title}" has been added to your cart!`);
   }
 
   viewDetails(product: any) {
@@ -44,8 +44,18 @@ export class ProductsComponent implements OnInit {
   showPopup(message: string) {
     this.notification = message;
     this.showNotification = true;
+    // Auto-close after 5 seconds
     setTimeout(() => {
       this.showNotification = false;
-    }, 1500);
+    }, 5000);
+  }
+
+  closePopup() {
+    this.showNotification = false;
+  }
+
+  goToCart() {
+    this.showNotification = false;
+    this.router.navigate(['/cart']);
   }
 }
