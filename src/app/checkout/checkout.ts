@@ -3,7 +3,6 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService } from '../cart/cart.service';
-import { CheckoutService } from './checkout.service';
 
 export interface CustomerInfo {
   firstName: string;
@@ -43,7 +42,6 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private checkoutService: CheckoutService,
     private router: Router
   ) {}
 
@@ -73,25 +71,20 @@ export class CheckoutComponent implements OnInit {
         orderDate: new Date()
       };
 
-      this.checkoutService.processOrder(orderData).subscribe({
-        next: (response: any) => {
-          this.isProcessing = false;
-          this.orderPlaced = true;
-          this.showPopup('Order placed successfully!');
-          // Clear cart after successful order
-          this.cartService.clearCart();
-          
-          // Redirect to products page after 3 seconds
-          setTimeout(() => {
-            this.router.navigate(['/products']);
-          }, 3000);
-        },
-        error: (error: any) => {
-          this.isProcessing = false;
-          this.showPopup('Error processing order. Please try again.');
-          console.error('Order processing error:', error);
-        }
-      });
+      // Simulate order processing
+      setTimeout(() => {
+        this.isProcessing = false;
+        this.orderPlaced = true;
+        this.showPopup('Order placed successfully!');
+        
+        // Clear cart after successful order
+        this.cartService.clearCart();
+        
+        // Redirect to products page after 3 seconds
+        setTimeout(() => {
+          this.router.navigate(['/products']);
+        }, 3000);
+      }, 2000);
     }
   }
 
